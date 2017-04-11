@@ -7,7 +7,9 @@ import 'rxjs/add/operator/do';
 export class TestEffects {
   // this side effect will be triggered when an action of type ADD_PERSON
   // will be dispatched
-  @Effect() effect = this.actions$.ofType(ADD_PERSON)
+  // Use { dispatch: false } if the effect's intention is not to cause new actions to enter the stream
+  // otherwise store-devtools will throw an error
+  @Effect({ dispatch: false }) effect = this.actions$.ofType(ADD_PERSON)
     .map(action => action.payload)
     .do(payload => console.log('effect triggered', payload));
 
