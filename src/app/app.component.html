@@ -1,9 +1,16 @@
 <h1>Testing ngrx-store</h1>
 <em>source example: <a href="https://gist.github.com/btroncone/a6e4347326749f938510">https://gist.github.com/btroncone/a6e4347326749f938510</a></em>
 <br>
+<people-stats
+  [invited]="(model$ | async)?.invited"
+  [attending]="(model$ | async)?.attending"
+  [guests]="(model$ | async)?.guests"></people-stats>
 <person-input (onAddPerson)="addPerson($event)"></person-input>
+<select (change)="filterPeople($event)">
+  <option *ngFor="let filter of filters" [value]="filter.action">{{filter.name}}</option>
+</select>
 <person-list
-  [people]="people$"
+  [people]="(model$ | async)?.people"
   (onAddGuest)="addGuest($event)"
   (onRemoveGuest)="removeGuest($event)"
   (onToggleAttending)="toggleAttending($event)"
