@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { AppComponent } from './app.component';
 import { PersonInputComponent, PersonListComponent, PeopleStatsComponent, PartyFilterComponent } from './components';
@@ -25,7 +26,10 @@ import { TestEffects } from './effects';
     HttpModule,
     // this will change https://github.com/ngrx/store/issues/376
     StoreModule.provideStore({ people, filter }, { people: [], filter: initialFilter }),
-    EffectsModule.run(TestEffects)
+    EffectsModule.run(TestEffects),
+    StoreDevtoolsModule.instrumentOnlyWithExtension({
+      maxAge: 5
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent]
