@@ -4,11 +4,10 @@
 <people-stats
   [invited]="(model$ | async)?.invited"
   [attending]="(model$ | async)?.attending"
-  [guests]="(model$ | async)?.guests"></people-stats>
+  [guests]="(model$ | async)?.guests"></people-stats><br>
+Percent attending: {{ percent | async }}%<br>
+<party-filter (onFilter)="filterPeople($event)"></party-filter><br>
 <person-input (onAddPerson)="addPerson($event)"></person-input>
-<select (change)="filterPeople($event)">
-  <option *ngFor="let filter of filters" [value]="filter.action">{{filter.name}}</option>
-</select>
 <person-list
   [people]="(model$ | async)?.people"
   (onAddGuest)="addGuest($event)"

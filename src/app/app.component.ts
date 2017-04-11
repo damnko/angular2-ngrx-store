@@ -1,3 +1,4 @@
+import { percentAttending } from './selectors/index';
 import { Filter } from './models/filter';
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -5,8 +6,10 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
+import 'rxjs/add/operator/let';
 
 import { Person, AppState } from './models';
+import { partyModel, attendees } from './selectors';
 
 import {
   ADD_GUEST,
@@ -24,25 +27,20 @@ export class AppComponent {
   people$: Observable<Person[]>;
   filter$: Observable<Filter>;
   model$: Observable<any>;
-  startId: number = Math.floor(Math.random() * (5000));
+  startId: number = Math.floor(Math.random() * 5000);
+  percent: Observable<number>;
 
   constructor(private store: Store<AppState>) {
     // select applies map + distinctUntilChanged behind the scenes
     // and returns only the selected slice of the app state/store
-    this.people$ = store.select('people');
+    this.people$ = store.let(attendees);
     this.filter$ = store.select('filter');
     this.model$ = Observable.combineLatest(
       this.people$,
       this.filter$,
       (people, filter) => { return { people, filter }; }
-    ).map(res => {
-      return {
-        invited: res.people.length,
-        people: res.people.filter(res.filter),
-        attending: res.people.filter(person => person.attending).length,
-        guests: res.people.reduce((curr, next) => curr + next.guests, 0)
-      };
-    });
+    ).let(partyModel);
+    this.percent = percentAttending(store);
   }
 
   addGuest(personId: number): void {

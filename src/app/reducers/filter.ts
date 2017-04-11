@@ -17,4 +17,6 @@ export const filter = (state: (person) => Person, action: Action): Filter => {
     default:
       return state;
   }
-}
+};
+
+export function initialFilter(person: Person) { return person };

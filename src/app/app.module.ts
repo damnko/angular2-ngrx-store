@@ -3,11 +3,13 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 import { AppComponent } from './app.component';
 import { PersonInputComponent, PersonListComponent, PeopleStatsComponent, PartyFilterComponent } from './components';
 import { people } from './reducers/people';
-import { filter } from './reducers/filter';
+import { filter, initialFilter } from './reducers/filter';
+import { TestEffects } from './effects';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,8 @@ import { filter } from './reducers/filter';
     FormsModule,
     HttpModule,
     // this will change https://github.com/ngrx/store/issues/376
-    StoreModule.provideStore({ people, filter }, { people: [], filter: (person) => person })
+    StoreModule.provideStore({ people, filter }, { people: [], filter: initialFilter }),
+    EffectsModule.run(TestEffects)
   ],
   providers: [],
   bootstrap: [AppComponent]
